@@ -1,0 +1,76 @@
+.card-c-i {
+  display: flex;
+  flex-direction: row;
+}
+
+.card {
+  min-width: 275;
+  max-width: 500px;
+  margin: auto;
+}
+
+.list {
+  display: flex; 
+  flex-direction: column;
+}
+
+/* .item-enter {
+  opacity: 0;
+}
+.item-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.item-exit {
+  opacity: 1;
+}
+.item-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+} */
+
+/* .item-enter {
+  opacity: 0.01;
+}
+
+.item-enter.item-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
+.item-exit {
+  opacity: 1;
+}
+
+.item-exit.item-exit-active {
+  opacity: 0.01;
+  transition: opacity 800ms ease-in;
+} */
+
+
+.item-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.item-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.item-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.item-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.item-enter-active,
+.item-exit-active{
+  transition: opacity 500ms, transform 500ms;
+}
+
+.itm-txt {
+  font-weight: bold !important;
+  cursor: pointer;
+  padding-right: 12px;
+}
