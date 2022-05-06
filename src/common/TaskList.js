@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../../utils/Firebase";
+import { db } from "../app/firebase";
 import { uid } from "uid";
 import { onValue, ref, remove, set, update } from "@firebase/database";
 import TextField from "@mui/material/TextField";

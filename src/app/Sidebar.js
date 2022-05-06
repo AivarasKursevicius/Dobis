@@ -20,7 +20,7 @@ import FormatListNumberedRoundedIcon from "@mui/icons-material/FormatListNumbere
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import Logo from "../../assets/512.png";
+import Logo from "../assets/512.png";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({

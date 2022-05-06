@@ -22,7 +22,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "./TaskList.css";
 import { useSelector, useDispatch } from "react-redux";
-import { addTodo } from "../../features/reducers/Todos";
 
 function renderItem({
   todo,

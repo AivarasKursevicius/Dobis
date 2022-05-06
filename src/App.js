@@ -1,19 +1,17 @@
 import React from "react";
-import "./style.css";
-import Error from "../../Error";
-import Rent from "../Rent/Rent";
-import Taxes from "../Taxes/Taxes";
-import Home from "../Home/Home";
-import RentInvoice from "../Rent/RentInvoice";
-import Groceries from "../Groceries/Groceries";
+import "./App.css";
+import Error from "./common/Error";
+import Rent from "./features/rent/Rent";
+import Taxes from "./features/taxes/Taxes";
+import Home from "./features/home/Home";
+import RentInvoice from "./features/rent/RentInvoice";
+import Groceries from "./features/groceries/Groceries";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-// import { useSelector } from "react-redux";
-import Sidebar, { DrawerHeader } from "../Sidebar/Sidebar";
+import Sidebar, { DrawerHeader } from "./app/Sidebar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Todo from "../Todo/Todo";
+import Todo from "./features/todo/Todo";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import TodoList from "../Common/TodoList";
 const theme = createTheme({
   palette: {
     primary: {
@@ -26,12 +24,9 @@ const theme = createTheme({
 });
 
 const App = () => {
-  // const isLogged = useSelector((state) => state.isLogged);
-
   return (
     <ThemeProvider theme={theme}>
-      <TodoList title="TODO" placeholder="Task" renderAvatar={true} />
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Box bgcolor="secondary.main" sx={{ display: "flex" }}>
           <CssBaseline />
           <Sidebar />
@@ -48,7 +43,7 @@ const App = () => {
             </Routes>
           </Box>
         </Box>
-      </BrowserRouter> */}
+      </BrowserRouter>
     </ThemeProvider>
   );
 };
