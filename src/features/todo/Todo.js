@@ -4,7 +4,7 @@ import TaskList from "../../common/TaskList";
 const Taxes = () => {
   return (
     <>
-      <TaskList title="TODO TEST" placeholder="Task" renderAvatar={true} />
+      <TaskList title="TODO" placeholder="Task" renderAvatar={true} />
     </>
   );
 };
