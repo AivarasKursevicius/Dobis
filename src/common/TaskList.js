@@ -96,12 +96,15 @@ const TaskList = (props) => {
       setTodos([]);
       const data = snapshot.val();
       if (data !== null) {
-        Object.values(data).map((todo) => {
-          setTodos((oldArray) => [...oldArray, todo]);
+        const sortedData = Object.values(data)
+          .slice()
+          .sort((a, b) => a.date - b.date);
+        sortedData.map((todo) => {
+          return setTodos((oldArray) => [...oldArray, todo]);
         });
       }
     });
-  }, []);
+  }, [props]);
 
   //write
   const writeToDatabase = () => {
@@ -112,6 +115,7 @@ const TaskList = (props) => {
         id,
         todo,
         complete: false,
+        date: new Date().getTime(),
       });
       setTodo("");
     } else {
