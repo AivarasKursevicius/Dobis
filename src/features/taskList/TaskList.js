@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../app/firebase";
+import { db } from "../../app/firebase";
 import { uid } from "uid";
 import { onValue, ref, remove, set, update } from "@firebase/database";
 import TextField from "@mui/material/TextField";
@@ -9,76 +9,18 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
-import Avatar from "@mui/material/Avatar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { TransitionGroup } from "react-transition-group";
 import "./TaskList.css";
-
-function renderItem({
-  todo,
-  complete,
-  id,
-  handleUpdate,
-  handleDelete,
-  handleCompleted,
-  props,
-}) {
-  return (
-    <CSSTransition key={id} timeout={400} classNames="item">
-      <ListItem
-        key={id}
-        secondaryAction={
-          <>
-            <IconButton
-              onClick={() => handleUpdate({ todo, id })}
-              edge="end"
-              aria-label="edit"
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => handleDelete(id)}
-              edge="end"
-              aria-label="delete"
-            >
-              <DeleteIcon />
-            </IconButton>
-          </>
-        }
-      >
-        {props.renderAvatar ? (
-          <ListItemAvatar>
-            <Avatar>
-              <AccountCircleIcon />
-            </Avatar>
-          </ListItemAvatar>
-        ) : (
-          <></>
-        )}
-
-        <ListItemText
-          onClick={() => handleCompleted({ complete, id })}
-          primary={todo}
-          className="itm-txt"
-          sx={{
-            textDecoration: complete ? "line-through" : "none",
-            textDecorationThickness: "2px",
-          }}
-        />
-      </ListItem>
-    </CSSTransition>
-  );
-}
+import renderTask from "./Task";
+import { getAllTasks } from "./taskListSlice";
+import { useDispatch } from "react-redux";
 
 const TaskList = (props) => {
+  // const tasks = useSelector((state) => state.tasks);
+  const dispatch = useDispatch();
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -99,30 +41,31 @@ const TaskList = (props) => {
         const sortedData = Object.values(data)
           .slice()
           .sort((a, b) => b.date - a.date);
+        dispatch(getAllTasks(sortedData));
         sortedData.map((todo) => {
           return setTodos((oldArray) => [...oldArray, todo]);
         });
       }
     });
-  }, [props]);
+  }, [props, dispatch]);
 
-  //write
   const writeToDatabase = () => {
     if (todo !== "") {
       setIsError(false);
       const id = uid();
-      set(ref(db, `${props.title}/${id}`), {
+      const newTask = {
         id,
         todo,
         complete: false,
         date: new Date().getTime(),
-      });
+      };
+      set(ref(db, `${props.title}/${id}`), newTask);
       setTodo("");
     } else {
       setIsError(true);
     }
   };
-  //delete
+
   const handleDelete = (id) => {
     remove(ref(db, `/${props.title}/${id}`));
   };
@@ -132,7 +75,7 @@ const TaskList = (props) => {
     setTempId(todo.id);
     setTodo(todo.todo);
   };
-  //update
+
   const handleSubmitChange = () => {
     if (todo !== "") {
       setIsError(false);
@@ -140,7 +83,6 @@ const TaskList = (props) => {
         todo,
         id: tempId,
       });
-
       setTodo("");
       setIsEdit(false);
     } else {
@@ -219,7 +161,7 @@ const TaskList = (props) => {
           <Box className="list">
             <TransitionGroup>
               {todos.map(({ todo, complete, id }) =>
-                renderItem({
+                renderTask({
                   todo,
                   complete,
                   id,

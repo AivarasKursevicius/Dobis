@@ -21,6 +21,10 @@ import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Logo from "../assets/512.png";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { authentication } from "./firebase";
+import { signOut } from "firebase/auth";
+import { useAuth } from "../useAuth";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -113,6 +117,18 @@ export default function MiniDrawer() {
     navigate(path);
   };
 
+  const { logout } = useAuth();
+
+  const handleSignOut = () => {
+    signOut(authentication)
+      .then(() => {
+        logout();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <React.Fragment>
       <AppBar position="fixed" open={open}>
@@ -162,33 +178,57 @@ export default function MiniDrawer() {
             )}
           </IconButton>
         </DrawerHeader>
-        <Divider />
         <List>
-          {sidebarList.map((item) => (
-            <ListItemButton
-              key={item.text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-              onClick={() => routeChange(item.path)}
-            >
-              <ListItemIcon
+          {sidebarList.map((item, i) => (
+            <>
+              {/* {i === 0 ? <Divider variant="middle" /> : <></>} */}
+              <ListItemButton
+                key={item.text}
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
+                onClick={() => routeChange(item.path)}
               >
-                {<item.icon />}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.text}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {<item.icon />}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+              <Divider variant="middle" />
+            </>
           ))}
+          <ListItemButton
+            key="Logout"
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+            onClick={() => handleSignOut()}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+          <Divider variant="middle" />
         </List>
       </Drawer>
     </React.Fragment>

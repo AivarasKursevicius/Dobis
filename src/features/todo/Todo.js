@@ -1,5 +1,5 @@
 import React from "react";
-import TaskList from "../../common/TaskList";
+import TaskList from "../taskList/TaskList";
 
 const Taxes = () => {
   return (

@@ -1,15 +1,9 @@
 import React from "react";
-import TaskList from "../../common/TaskList";
+import TaskList from "../taskList/TaskList";
 
 function Groceries() {
   return (
-    <>
-      <TaskList
-        title="GROCERIES"
-        placeholder="Groceries"
-        renderAvatar={false}
-      />
-    </>
+    <TaskList title="GROCERIES" placeholder="Groceries" renderAvatar={false} />
   );
 }
 

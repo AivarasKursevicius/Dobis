@@ -1,11 +1,11 @@
 import React from "react";
 
-function Home() {
+const Home = () => {
   return (
-    <div style={{ margin: "auto", width: "400px" }}>
+    <main style={{ margin: "auto", width: "400px" }}>
       <h1>Home page !</h1>
-    </div>
+    </main>
   );
-}
+};
 
 export default Home;
