@@ -26,7 +26,7 @@ import { authentication } from "./firebase";
 import { signOut } from "firebase/auth";
 import { useAuth } from "../useAuth";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -94,7 +94,6 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -180,10 +179,9 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <List>
           {sidebarList.map((item, i) => (
-            <>
-              {/* {i === 0 ? <Divider variant="middle" /> : <></>} */}
+            <React.Fragment key={i}>
               <ListItemButton
-                key={item.text}
+                key={i}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
@@ -192,6 +190,7 @@ export default function MiniDrawer() {
                 onClick={() => routeChange(item.path)}
               >
                 <ListItemIcon
+                  key={i}
                   sx={{
                     minWidth: 0,
                     mr: open ? 3 : "auto",
@@ -206,10 +205,10 @@ export default function MiniDrawer() {
                 />
               </ListItemButton>
               <Divider variant="middle" />
-            </>
+            </React.Fragment>
           ))}
           <ListItemButton
-            key="Logout"
+            key="logout"
             sx={{
               minHeight: 48,
               justifyContent: open ? "initial" : "center",
@@ -218,6 +217,7 @@ export default function MiniDrawer() {
             onClick={() => handleSignOut()}
           >
             <ListItemIcon
+              key="logout"
               sx={{
                 minWidth: 0,
                 mr: open ? 3 : "auto",
