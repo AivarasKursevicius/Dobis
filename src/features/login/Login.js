@@ -10,7 +10,6 @@ export const LoginPage = () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(authentication, provider)
       .then((res) => {
-        console.log(res);
         if (allowList.includes(res.user.email)) {
           login(res.user);
         }
