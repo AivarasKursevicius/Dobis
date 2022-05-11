@@ -2,21 +2,27 @@ import * as React from "react";
 import { useAuth } from "../../useAuth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { authentication } from "../../app/firebase";
-
+import "./Login.css";
 export const LoginPage = () => {
   const { login } = useAuth();
-
+  const allowList = ["aivaraskursevicius@gmail.com", "guoda0831@gmail.com"];
   const signIn = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(authentication, provider)
       .then((res) => {
         console.log(res);
-        if (res.user.email !== "testaswebsite@gmail.com") {
+        if (allowList.includes(res.user.email)) {
           login(res.user);
         }
       })
       .catch((er) => console.log(er));
   };
 
-  return <button onClick={() => signIn()}>Sing In</button>;
+  return (
+    <div className="login-pg">
+      <button className="login-with-google-btn" onClick={() => signIn()}>
+        Sign in with Google
+      </button>
+    </div>
+  );
 };
