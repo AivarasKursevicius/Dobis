@@ -9,202 +9,98 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-
-const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
+const Head = [
   {
-    id: "population",
-    label: "Population",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
+    id: "111",
+    label: "AAAA",
+    width: 170,
   },
   {
-    id: "size",
-    label: "Size\u00a0(km\u00b2)",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toLocaleString("en-US"),
+    id: "222",
+    label: "BBBB",
+    width: 170,
   },
   {
-    id: "density",
-    label: "Density",
-    minWidth: 170,
-    align: "right",
-    format: (value) => value.toFixed(2),
+    id: "333",
+    label: "CCCC",
+    width: 170,
   },
-  { id: "name1", label: "Name1", minWidth: 170 },
-  { id: "size1", label: "Name2", minWidth: 170 },
-  { id: "code1", label: "Name3", minWidth: 170 },
-  { id: "population1", label: "Name4", minWidth: 170 },
+  {
+    id: "444",
+    label: "DDDD",
+    width: 170,
+  },
+  {
+    id: "555",
+    label: "EEEE",
+    width: 170,
+  },
+  {
+    id: "666",
+    label: "FFF",
+    width: 170,
+  },
 ];
-
-function createData(
-  name,
-  code,
-  population,
-  size,
-  name1,
-  code1,
-  population1,
-  size1
-) {
-  const density = population / size;
-  return {
-    name,
-    code,
-    population,
-    size,
-    density,
-    name1,
-    code1,
-    population1,
-    size1,
-  };
-}
-
-const rows = [
-  createData(
-    "India",
-    "IN",
-    1324171354,
-    3287263,
-    "name1",
-    "code1",
-    "population1",
-    "size1"
-  ),
-  createData(
-    "China",
-    "CN",
-    1403500365,
-    9596961,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Italy",
-    "IT",
-    60483973,
-    301340,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "United States",
-    "US",
-    327167434,
-    9833520,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Canada",
-    "CA",
-    37602103,
-    9984670,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Australia",
-    "AU",
-    25475400,
-    7692024,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Germany",
-    "DE",
-    83019200,
-    357578,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Ireland",
-    "IE",
-    4857000,
-    70273,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Mexico",
-    "MX",
-    126577691,
-    1972550,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Japan",
-    "JP",
-    126317000,
-    377973,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "France",
-    "FR",
-    67022000,
-    640679,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "United Kingdom",
-    "GB",
-    67545757,
-    242495,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Nigeria",
-    "NG",
-    200962417,
-    923768,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
-  ),
-  createData(
-    "Brazil",
-    "BR",
-    210147125,
-    8515767,
-    "Brazil",
-    "Brazil",
-    "Brazil",
-    "Brazil"
-  ),
+const Data = [
+  {
+    id: "123",
+    data: [
+      {
+        id: "111",
+        value: "40",
+      },
+      {
+        id: "222",
+        value: "34",
+      },
+      {
+        id: "333",
+        value: "67",
+      },
+      {
+        id: "444",
+        value: "90",
+      },
+      {
+        id: "555",
+        value: "689",
+      },
+      {
+        id: "666",
+        value: "345",
+      },
+    ],
+  },
+  {
+    id: "456",
+    date: "2022-05-05",
+    data: [
+      {
+        id: "111",
+        value: "40",
+      },
+      {
+        id: "222",
+        value: "34",
+      },
+      {
+        id: "333",
+        value: "67",
+      },
+      {
+        id: "444",
+        value: "90",
+      },
+      {
+        id: "555",
+        value: "689",
+      },
+      {
+        id: "666",
+        value: "345",
+      },
+    ],
+  },
 ];
 
 export default function TestTable() {
@@ -226,16 +122,16 @@ export default function TestTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" style={{ width: "100px" }}>
+              <TableCell align="center" style={{ width: "80px" }}>
                 <IconButton edge="end" aria-label="edit">
                   <EditIcon />
                 </IconButton>
               </TableCell>
-              {columns.map((column) => (
+              {Head.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  align="left"
+                  style={{ minWidth: column.width }}
                 >
                   {column.label}
                 </TableCell>
@@ -243,46 +139,46 @@ export default function TestTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, i) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={i}>
-                    {columns.map((column, index) => {
-                      const value = row[column.id];
-                      const isFirst = index === 0;
-                      return (
-                        <React.Fragment key={index}>
-                          {isFirst ? (
-                            <TableCell
-                              align="center"
-                              style={{ width: "100px" }}
-                            >
-                              <IconButton edge="end" aria-label="edit">
-                                <EditIcon />
-                              </IconButton>
+            {Data.slice(
+              page * rowsPerPage,
+              page * rowsPerPage + rowsPerPage
+            ).map((row, i) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={i}>
+                  {Head.map((column, index) => {
+                    const isFirst = index === 0;
+                    return row.data.map((a) => {
+                      console.log("row ", a, " column ", column);
+                      if (a.id === column.id) {
+                        return (
+                          <React.Fragment key={index}>
+                            {isFirst ? (
+                              <TableCell align="left" style={{ width: "80px" }}>
+                                <IconButton edge="end" aria-label="edit">
+                                  <EditIcon />
+                                </IconButton>
+                              </TableCell>
+                            ) : (
+                              <></>
+                            )}
+                            <TableCell key={column.id} align="left">
+                              {a.value}
                             </TableCell>
-                          ) : (
-                            <></>
-                          )}
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        </React.Fragment>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                          </React.Fragment>
+                        );
+                      }
+                    });
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"
-        count={rows.length}
+        count={Data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
