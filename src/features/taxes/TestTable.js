@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -32,15 +34,34 @@ const columns = [
     align: "right",
     format: (value) => value.toFixed(2),
   },
-  { id: "name2", label: "Name", minWidth: 170 },
-  { id: "name3", label: "Name", minWidth: 170 },
-  { id: "name4", label: "Name", minWidth: 170 },
-  { id: "namea", label: "Name", minWidth: 170 },
+  { id: "name1", label: "Name1", minWidth: 170 },
+  { id: "size1", label: "Name2", minWidth: 170 },
+  { id: "code1", label: "Name3", minWidth: 170 },
+  { id: "population1", label: "Name4", minWidth: 170 },
 ];
 
-function createData(name, code, population, size) {
+function createData(
+  name,
+  code,
+  population,
+  size,
+  name1,
+  code1,
+  population1,
+  size1
+) {
   const density = population / size;
-  return { name, code, population, size, density };
+  return {
+    name,
+    code,
+    population,
+    size,
+    density,
+    name1,
+    code1,
+    population1,
+    size1,
+  };
 }
 
 const rows = [
@@ -49,10 +70,10 @@ const rows = [
     "IN",
     1324171354,
     3287263,
-    "Nigeria",
-    "Nigeria",
-    "Nigeria",
-    "Nigeria"
+    "name1",
+    "code1",
+    "population1",
+    "size1"
   ),
   createData(
     "China",
@@ -205,6 +226,11 @@ export default function TestTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
+              <TableCell align="center" style={{ width: "100px" }}>
+                <IconButton edge="end" aria-label="edit">
+                  <EditIcon />
+                </IconButton>
+              </TableCell>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
@@ -222,14 +248,29 @@ export default function TestTable() {
               .map((row, i) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={i}>
-                    {columns.map((column) => {
+                    {columns.map((column, index) => {
                       const value = row[column.id];
+                      const isFirst = index === 0;
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
+                        <React.Fragment key={index}>
+                          {isFirst ? (
+                            <TableCell
+                              align="center"
+                              style={{ width: "100px" }}
+                            >
+                              <IconButton edge="end" aria-label="edit">
+                                <EditIcon />
+                              </IconButton>
+                            </TableCell>
+                          ) : (
+                            <></>
+                          )}
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        </React.Fragment>
                       );
                     })}
                   </TableRow>

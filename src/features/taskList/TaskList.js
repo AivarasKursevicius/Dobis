@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { db } from "../../app/firebase";
 import { uid } from "uid";
 import { onValue, ref, remove, set, update } from "@firebase/database";
@@ -14,11 +14,13 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TransitionGroup } from "react-transition-group";
 import "./TaskList.css";
-import renderTask from "./Task";
+import RenderTask from "./Task";
 import { getAllTasks } from "./taskListSlice";
 import { useDispatch } from "react-redux";
+import { useModal } from "../modal/useModal";
 
 const TaskList = (props) => {
+  const { show, RenderModal } = useModal();
   const dispatch = useDispatch();
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
@@ -160,19 +162,20 @@ const TaskList = (props) => {
           <Box className="list">
             <TransitionGroup>
               {todos.map(({ todo, complete, id }) =>
-                renderTask({
+                RenderTask({
                   todo,
                   complete,
                   id,
                   handleUpdate,
-                  handleDelete,
                   handleCompleted,
                   props,
+                  show,
                 })
               )}
             </TransitionGroup>
           </Box>
         </List>
+        <RenderModal action={handleDelete} />
       </CardContent>
     </Card>
   );

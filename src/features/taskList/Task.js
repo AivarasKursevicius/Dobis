@@ -10,15 +10,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import { CSSTransition } from "react-transition-group";
 import "./TaskList.css";
 
-function renderTask({
+const RenderTask = ({
   todo,
   complete,
   id,
   handleUpdate,
-  handleDelete,
   handleCompleted,
   props,
-}) {
+  show,
+}) => {
   return (
     <CSSTransition key={id} timeout={400} classNames="item">
       <ListItem
@@ -32,11 +32,7 @@ function renderTask({
             >
               <EditIcon />
             </IconButton>
-            <IconButton
-              onClick={() => handleDelete(id)}
-              edge="end"
-              aria-label="delete"
-            >
+            <IconButton onClick={() => show(id)} edge="end" aria-label="delete">
               <DeleteIcon />
             </IconButton>
           </>
@@ -64,6 +60,6 @@ function renderTask({
       </ListItem>
     </CSSTransition>
   );
-}
+};
 
-export default renderTask;
+export default RenderTask;
