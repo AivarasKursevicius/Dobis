@@ -19,7 +19,6 @@ import { getAllTasks } from "./taskListSlice";
 import { useDispatch } from "react-redux";
 
 const TaskList = (props) => {
-  // const tasks = useSelector((state) => state.tasks);
   const dispatch = useDispatch();
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
@@ -111,7 +110,7 @@ const TaskList = (props) => {
   };
 
   return (
-    <Card className="card">
+    <Card sx={{ width: { xs: `calc(100% - 20px)` } }} className="card">
       <CardContent>
         <Typography variant="h4" align="center" sx={{ fontWeight: "bold" }}>
           {props.title}

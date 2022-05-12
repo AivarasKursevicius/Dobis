@@ -39,11 +39,14 @@ const sidebarList = [
 const SidebarHeader = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
   const routeChange = (to) => {
-    let path = to;
+    var path = to;
     navigate(path);
+    setMobileOpen(false);
   };
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -140,7 +143,6 @@ const SidebarHeader = (props) => {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
       >
         <Drawer
           container={container}
@@ -178,8 +180,12 @@ const SidebarHeader = (props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          marginTop: "30px",
+          marginBottom: "30px",
+          width: {
+            sm: `calc(100% - ${drawerWidth}px)`,
+            xs: `calc(100% - ${drawerWidth}px)`,
+          },
         }}
       >
         <Toolbar />
