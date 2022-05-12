@@ -1,7 +1,7 @@
 import React from "react";
 import TaskList from "../taskList/TaskList";
 
-const Taxes = () => {
+const Todo = () => {
   return (
     <>
       <TaskList title="TODO" placeholder="Task" renderAvatar={true} />
@@ -9,4 +9,4 @@ const Taxes = () => {
   );
 };
 
-export default Taxes;
+export default Todo;
