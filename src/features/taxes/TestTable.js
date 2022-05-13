@@ -223,8 +223,12 @@ export default function TestTable(props) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" style={{ width: "150px" }}>
-                <IconButton edge="end" aria-label="edit">
+              <TableCell align="center">
+                <IconButton
+                  style={{ width: "80px" }}
+                  edge="end"
+                  aria-label="edit"
+                >
                   <EditIcon />
                 </IconButton>
               </TableCell>
@@ -281,7 +285,6 @@ export default function TestTable(props) {
                 <TableCell
                   align="center"
                   style={{
-                    width: "150px",
                     display: "flex",
                     justifyContent: "space-evenly",
                   }}
