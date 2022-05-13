@@ -111,6 +111,13 @@ export default function TestTable(props) {
     setNewRow({ data: [] });
   };
 
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleNewRow();
+    }
+  };
+
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -169,7 +176,11 @@ export default function TestTable(props) {
                   };
                   newRow.data = [...newRow.data, newData];
                   return (
-                    <TableCell key={index} align="left">
+                    <TableCell
+                      onKeyPress={handleEnter}
+                      key={index}
+                      align="left"
+                    >
                       <Input
                         onChange={(e) => handleValueChange(e, column.id)}
                       />
