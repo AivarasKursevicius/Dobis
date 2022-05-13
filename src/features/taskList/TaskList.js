@@ -15,13 +15,10 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TransitionGroup } from "react-transition-group";
 import "./TaskList.css";
 import RenderTask from "./Task";
-import { getAllTasks } from "./taskListSlice";
-import { useDispatch } from "react-redux";
 import { useModal } from "../modal/useModal";
 
 const TaskList = (props) => {
   const { show, RenderModal } = useModal();
-  const dispatch = useDispatch();
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -42,13 +39,12 @@ const TaskList = (props) => {
         const sortedData = Object.values(data)
           .slice()
           .sort((a, b) => b.date - a.date);
-        dispatch(getAllTasks(sortedData));
         sortedData.map((todo) => {
           return setTodos((oldArray) => [...oldArray, todo]);
         });
       }
     });
-  }, [props, dispatch]);
+  }, [props]);
 
   const writeToDatabase = () => {
     if (todo !== "") {

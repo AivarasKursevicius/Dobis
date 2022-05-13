@@ -9,12 +9,10 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import { onValue, ref, remove, set, update } from "@firebase/database";
+import { onValue, ref, set } from "@firebase/database";
 import { db } from "../../app/firebase";
-import Input from "@mui/material/Input";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import { uid as uuid } from "uid";
+import NewRow from "./NewRow";
+import Row from "./Row";
 
 const Head = [
   {
@@ -59,8 +57,6 @@ export default function TestTable(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isEditRow, setIsEditRow] = useState(false);
-  const [isEditCol, setIsEditCol] = useState(false);
-  const [headData, setHeadData] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [newRow, setNewRow] = useState({ data: [] });
 
@@ -91,9 +87,8 @@ export default function TestTable(props) {
   };
 
   const handleNewRow = () => {
-    const uid = uuid();
-    newRow["date"] = new Date().getTime();
-    set(ref(db, `TAXES/DATA/${uid}`), newRow);
+    newRow.date = new Date().getTime();
+    set(ref(db, `TAXES/DATA/${newRow.date}`), newRow);
     setNewRow({ data: [] });
     props.setIsNewRow(false);
   };
@@ -124,12 +119,15 @@ export default function TestTable(props) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                <IconButton
-                  style={{ width: "80px" }}
-                  edge="end"
-                  aria-label="edit"
-                >
+              <TableCell
+                align="center"
+                style={{
+                  width: "100px",
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <IconButton edge="end" aria-label="edit">
                   <EditIcon />
                 </IconButton>
               </TableCell>
@@ -146,84 +144,31 @@ export default function TestTable(props) {
           </TableHead>
           <TableBody>
             {props.isNewRow ? (
-              <TableRow hover role="checkbox" tabIndex={-1} key="08">
-                <TableCell
-                  align="center"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                  }}
-                >
-                  <IconButton
-                    onClick={() => handleCancel()}
-                    edge="end"
-                    aria-label="edit"
-                  >
-                    <CancelIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleNewRow()}
-                    edge="end"
-                    aria-label="edit"
-                  >
-                    <CheckCircleIcon />
-                  </IconButton>
-                </TableCell>
-                {Head.map((column, index) => {
-                  var newData = {
-                    id: column.id,
-                    value: "",
-                  };
-                  newRow.data = [...newRow.data, newData];
-                  return (
-                    <TableCell
-                      onKeyPress={handleEnter}
-                      key={index}
-                      align="left"
-                    >
-                      <Input
-                        onChange={(e) => handleValueChange(e, column.id)}
-                      />
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
+              <NewRow
+                handleCancel={handleCancel}
+                handleNewRow={handleNewRow}
+                newRow={newRow}
+                handleValueChange={handleValueChange}
+                handleEnter={handleEnter}
+                Head={Head}
+              />
             ) : (
               <></>
             )}
+
             {rowData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, i) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={i}>
-                    {Head.map((column, index) => {
-                      const isFirst = index === 0;
-                      return row.data.map((a) => {
-                        if (a.id === column.id) {
-                          return (
-                            <React.Fragment key={index}>
-                              {isFirst ? (
-                                <TableCell
-                                  onClick={() => handleEditRowToggle()}
-                                  align="center"
-                                  style={{ width: "80px" }}
-                                >
-                                  <IconButton edge="end" aria-label="edit">
-                                    <EditIcon />
-                                  </IconButton>
-                                </TableCell>
-                              ) : (
-                                <></>
-                              )}
-                              <TableCell key={column.id} align="left">
-                                {a.value}
-                              </TableCell>
-                            </React.Fragment>
-                          );
-                        }
-                      });
-                    })}
-                  </TableRow>
+                  <Row
+                    key={i}
+                    row={row}
+                    Head={Head}
+                    rows={rowData}
+                    setRowData={setRowData}
+                    handleEditRowToggle={handleEditRowToggle}
+                    i={i}
+                  />
                 );
               })}
           </TableBody>
