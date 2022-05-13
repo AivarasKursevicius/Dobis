@@ -14,9 +14,13 @@ import "./Taxes.css";
 
 function Taxes() {
   const [filter, setFilter] = useState("ALL");
+  const [isNewRow, setIsNewRow] = useState(false);
 
   const handleChange = (event) => {
     setFilter(event.target.value);
+  };
+  const handleNewRow = () => {
+    setIsNewRow(!isNewRow);
   };
 
   return (
@@ -53,6 +57,7 @@ function Taxes() {
               variant="outlined"
               size="medium"
               startIcon={<AddCircleIcon />}
+              onClick={() => handleNewRow()}
             >
               ADD NEW ROW
             </Button>
@@ -67,7 +72,7 @@ function Taxes() {
           </ButtonGroup>
         </Box>
       </CardContent>
-      <TestTable />
+      <TestTable isNewRow={isNewRow} setIsNewRow={setIsNewRow} />
     </Card>
   );
 }
