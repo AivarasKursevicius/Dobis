@@ -59,6 +59,7 @@ const TaxesTable = (props) => {
   const [isEditRow, setIsEditRow] = useState(false);
   const [rowData, setRowData] = useState([]);
   const [newRow, setNewRow] = useState({ data: [] });
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const starCountRef = ref(db, `TAXES/DATA`);
@@ -87,10 +88,16 @@ const TaxesTable = (props) => {
   };
 
   const handleNewRow = () => {
-    newRow.date = new Date().getTime();
-    set(ref(db, `TAXES/DATA/${newRow.date}`), newRow);
-    setNewRow({ data: [] });
-    props.setIsNewRow(false);
+    if (newRow.data.some((item) => item.value.trim() !== "")) {
+      setIsError(false);
+      newRow.date = new Date().getTime();
+      newRow.isEdit = false;
+      set(ref(db, `TAXES/DATA/${newRow.date}`), newRow);
+      setNewRow({ data: [], isEdit: false });
+      props.setIsNewRow(false);
+    } else {
+      setIsError(true);
+    }
   };
 
   const handleValueChange = (e, id) => {
@@ -101,6 +108,7 @@ const TaxesTable = (props) => {
 
   const handleCancel = () => {
     props.setIsNewRow(false);
+    setIsError(false);
     setNewRow({ data: [] });
   };
 
@@ -149,6 +157,7 @@ const TaxesTable = (props) => {
                 handleValueChange={handleValueChange}
                 handleEnter={handleEnter}
                 Head={Head}
+                isError={isError}
               />
             ) : (
               <></>
@@ -165,6 +174,7 @@ const TaxesTable = (props) => {
                     rows={rowData}
                     setRowData={setRowData}
                     handleEditRowToggle={handleEditRowToggle}
+                    handleValueChange={handleValueChange}
                     i={i}
                   />
                 );

@@ -32,14 +32,20 @@ const NewRow = (props) => {
         </IconButton>
       </TableCell>
       {props.Head.map((column, index) => {
-        var newData = {
-          id: column.id,
-          value: "",
-        };
-        props.newRow.data = [...props.newRow.data, newData];
+        if (props.newRow.data.length < 6) {
+          var newData = {
+            id: column.id,
+            value: "",
+          };
+
+          props.newRow.data = [...props.newRow.data, newData];
+        }
         return (
           <TableCell onKeyPress={props.handleEnter} key={index} align="left">
-            <Input onChange={(e) => props.handleValueChange(e, column.id)} />
+            <Input
+              error={props.isError}
+              onChange={(e) => props.handleValueChange(e, column.id)}
+            />
           </TableCell>
         );
       })}
