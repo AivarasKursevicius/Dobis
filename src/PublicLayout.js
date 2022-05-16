@@ -1,5 +1,5 @@
 import { Navigate, useOutlet } from "react-router-dom";
-import { useAuth } from "./useAuth";
+import { useAuth } from "./hooks/useAuth";
 
 export const PublicLayout = () => {
   const { user } = useAuth();

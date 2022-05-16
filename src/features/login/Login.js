@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useAuth } from "../../useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { authentication } from "../../app/firebase";
 import "./Login.css";

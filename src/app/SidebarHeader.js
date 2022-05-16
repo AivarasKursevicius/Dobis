@@ -22,7 +22,7 @@ import FormatListNumberedRoundedIcon from "@mui/icons-material/FormatListNumbere
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
-import { useAuth } from "../useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { authentication } from "./firebase";
 
 const drawerWidth = 240;

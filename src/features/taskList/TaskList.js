@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../../app/firebase";
 import { uid } from "uid";
 import { onValue, ref, remove, set, update } from "@firebase/database";
@@ -15,7 +15,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TransitionGroup } from "react-transition-group";
 import "./TaskList.css";
 import RenderTask from "./Task";
-import { useModal } from "../modal/useModal";
+import { useModal } from "../../hooks/useModal";
 
 const TaskList = (props) => {
   const { show, RenderModal } = useModal();
@@ -29,7 +29,6 @@ const TaskList = (props) => {
     setTodo(e.target.value);
   };
 
-  //read
   useEffect(() => {
     const starCountRef = ref(db, `${props.title}`);
     onValue(starCountRef, (snapshot) => {

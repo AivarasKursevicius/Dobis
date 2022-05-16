@@ -4,7 +4,7 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./app/store";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./useAuth";
+import { AuthProvider } from "./hooks/useAuth";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

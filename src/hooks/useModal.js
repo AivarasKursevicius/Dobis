@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import TransitionsModal from "./Modal";
+import TransitionsModal from "../features/modal/Modal";
 
 export const useModal = () => {
   const [isVisible, setIsVisible] = useState(false);

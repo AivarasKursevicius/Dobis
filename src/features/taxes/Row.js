@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ref, remove } from "@firebase/database";
 import { db } from "../../app/firebase";
-
+import { uid } from "uid";
 const Row = (props) => {
   const deleteRow = (date) => {
     const row = props.rows.find((row) => row.date === date);
@@ -17,37 +17,37 @@ const Row = (props) => {
     <TableRow hover role="checkbox" tabIndex={-1} key={props.i}>
       {props.Head.map((column, index) => {
         const isFirst = index === 0;
-        return props.row.data.map((a) => {
-          if (a.id === column.id) {
-            return (
-              <React.Fragment key={index}>
-                {isFirst ? (
-                  <TableCell
-                    onClick={() => props.handleEditRowToggle()}
-                    align="center"
-                    style={{ width: "100px" }}
+        return props.row.data.map((a) =>
+          a.id === column.id ? (
+            <React.Fragment key={index}>
+              {isFirst ? (
+                <TableCell
+                  onClick={() => props.handleEditRowToggle()}
+                  align="center"
+                  style={{ width: "100px" }}
+                >
+                  <IconButton edge="end" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => deleteRow(props.row.date)}
+                    edge="end"
+                    aria-label="delete"
                   >
-                    <IconButton edge="end" aria-label="edit">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => deleteRow(props.row.date)}
-                      edge="end"
-                      aria-label="delete"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                ) : (
-                  <></>
-                )}
-                <TableCell key={column.id} align="left">
-                  {a.value}
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
-              </React.Fragment>
-            );
-          }
-        });
+              ) : (
+                <></>
+              )}
+              <TableCell key={column.id} align="left">
+                {a.value}
+              </TableCell>
+            </React.Fragment>
+          ) : (
+            <React.Fragment key={uid()} />
+          )
+        );
       })}
     </TableRow>
   );

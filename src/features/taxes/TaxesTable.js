@@ -1,151 +1,187 @@
 import React, { useState, useEffect } from "react";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import { onValue, ref, remove, set, update } from "@firebase/database";
+import { onValue, ref, set } from "@firebase/database";
 import { db } from "../../app/firebase";
-import { useDispatch, useSelector } from "react-redux";
-import { getTaxes } from "./taxesSlice";
-import Input from "@mui/material/Input";
-import TextField from "@mui/material/TextField";
-import { makeStyles } from "@mui/styles";
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-    overflowX: "auto",
-  },
-  table: {
-    minWidth: 650,
-  },
-  selectTableCell: {
-    fontSize: "inherit !important",
-    width: 60,
-  },
-  tableCell: {
-    fontSize: "inherit !important",
-    // width: 130,
-    height: 40,
-  },
-  input: {
-    fontSize: "inherit !important",
-    // width: 130,
-    height: 40,
-  },
-  date: {
-    fontSize: "inherit !important",
-    // width: 100,
-    height: 40,
-  },
-});
-const TaxesTable = () => {
-  const classes = useStyles();
+import NewRow from "./NewRow";
+import Row from "./Row";
 
-  const dispatch = useDispatch();
-  const taxes = useSelector((state) => state.taxes);
+const Head = [
+  {
+    id: "111",
+    label: "AAAA",
+    width: 170,
+    owner: "A",
+  },
+  {
+    id: "222",
+    label: "BBBB",
+    width: 170,
+    owner: "A",
+  },
+  {
+    id: "333",
+    label: "CCCC",
+    width: 170,
+    owner: "ALL",
+  },
+  {
+    id: "444",
+    label: "DDDD",
+    width: 170,
+    owner: "ALL",
+  },
+  {
+    id: "555",
+    label: "EEEE",
+    width: 170,
+    owner: "G",
+  },
+  {
+    id: "666",
+    label: "FFF",
+    width: 170,
+    owner: "G",
+  },
+];
+
+const TaxesTable = (props) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isEditRow, setIsEditRow] = useState(false);
+  const [rowData, setRowData] = useState([]);
+  const [newRow, setNewRow] = useState({ data: [] });
 
   useEffect(() => {
-    const starCountRef = ref(db, `TAXES`);
+    const starCountRef = ref(db, `TAXES/DATA`);
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
       if (data !== null) {
-        dispatch(getTaxes(Object.values(data)));
+        const sortedData = Object.values(data)
+          .slice()
+          .sort((a, b) => b.date - a.date);
+        setRowData(sortedData);
       }
     });
   }, []);
 
-  const handleEdit = (id, edit) => {
-    update(ref(db, `/TAXES/${id}`), {
-      edit: !edit,
-      id: id,
-    });
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleEditRowToggle = () => {
+    setIsEditRow(!isEditRow);
+  };
+
+  const handleNewRow = () => {
+    newRow.date = new Date().getTime();
+    set(ref(db, `TAXES/DATA/${newRow.date}`), newRow);
+    setNewRow({ data: [] });
+    props.setIsNewRow(false);
+  };
+
+  const handleValueChange = (e, id) => {
+    newRow.data.map((item) =>
+      item.id === id ? (item.value = e.target.value) : item.value
+    );
+  };
+
+  const handleCancel = () => {
+    props.setIsNewRow(false);
+    setNewRow({ data: [] });
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleNewRow();
+    }
   };
 
   return (
-    <TableContainer component={Paper} style={{ width: "100%" }}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell className={classes.tableCell} align="left">
-              <IconButton edge="end" aria-label="edit">
-                <EditIcon />
-              </IconButton>
-            </TableCell>
-            <TableCell className={classes.tableCell} align="left">
-              Date
-            </TableCell>
-            {taxes[0].data.map((header, i) => (
-              <TableCell key={i} align="left">
-                {header.name}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {taxes.map((outerTax, i) => {
-            return (
-              <TableRow
-                key={i}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    <Paper sx={{ width: "100%" }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell
+                align="center"
+                style={{
+                  width: "100px",
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                }}
               >
+                <IconButton edge="end" aria-label="edit">
+                  <EditIcon />
+                </IconButton>
+              </TableCell>
+              {Head.map((column) => (
                 <TableCell
-                  className={classes.tableCell}
-                  key={outerTax.id}
+                  key={column.id}
                   align="left"
+                  style={{ minWidth: column.width }}
                 >
-                  <IconButton
-                    onClick={() => handleEdit(outerTax.id, outerTax.edit)}
-                    edge="end"
-                    aria-label="edit"
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  {column.label}
                 </TableCell>
-                <TableCell className={classes.tableCell} key={i} align="left">
-                  {outerTax.edit ? (
-                    <TextField
-                      className={classes.date}
-                      id="date"
-                      type="date"
-                      defaultValue={outerTax.date}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  ) : (
-                    outerTax.date
-                  )}
-                </TableCell>
-                {outerTax.data.map((innerTax, i) => {
-                  return (
-                    <TableCell
-                      className={classes.tableCell}
-                      key={i}
-                      align="left"
-                    >
-                      {outerTax.edit ? (
-                        <Input
-                          className={classes.input}
-                          key={i}
-                          value={innerTax.value}
-                        />
-                      ) : (
-                        innerTax.value
-                      )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.isNewRow ? (
+              <NewRow
+                handleCancel={handleCancel}
+                handleNewRow={handleNewRow}
+                newRow={newRow}
+                handleValueChange={handleValueChange}
+                handleEnter={handleEnter}
+                Head={Head}
+              />
+            ) : (
+              <></>
+            )}
+
+            {rowData
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, i) => {
+                return (
+                  <Row
+                    key={i}
+                    row={row}
+                    Head={Head}
+                    rows={rowData}
+                    setRowData={setRowData}
+                    handleEditRowToggle={handleEditRowToggle}
+                    i={i}
+                  />
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={rowData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 };
 

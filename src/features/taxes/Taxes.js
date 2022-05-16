@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import TestTable from "./TestTable";
+import TestTable from "./TaxesTable";
 import "./Taxes.css";
 
 function Taxes() {
