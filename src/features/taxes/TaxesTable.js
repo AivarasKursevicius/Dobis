@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import { onValue, ref, set, remove } from "@firebase/database";
+import { onValue, ref, set, remove, update } from "@firebase/database";
 import { db } from "../../app/firebase";
 import NewRow from "./NewRow";
 import Row from "./Row";
@@ -28,6 +28,7 @@ const TaxesTable = (props) => {
   const [newRow, setNewRow] = useState({ data: [] });
   const [newCol, setNewCol] = useState({ label: "" });
   const [isDelCol, setIsDelCol] = useState(false);
+  const [isEditCol, setIsEditCol] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const TaxesTable = (props) => {
       label: e.target.value,
       width: 170,
       date: new Date().getTime(),
-      owner: "ALL",
+      owner: props.filter,
     });
   };
 
@@ -124,11 +125,34 @@ const TaxesTable = (props) => {
 
   const toggleDelCol = () => {
     setIsDelCol(!isDelCol);
-    console.log(isDelCol);
+  };
+
+  const toggleEditCol = () => {
+    setIsEditCol(!isEditCol);
+  };
+
+  const handleEditEnterCol = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      submitColumnChanges();
+    }
   };
 
   const deleteCol = (id) => {
     remove(ref(db, `/TAXES/COLUMN/${id}`));
+    const column = head.filter((col) => col.id !== id);
+    setHead(column);
+  };
+
+  const handleValueChangeColumn = (e, id) => {
+    head.map((item) =>
+      item.id === id ? (item.label = e.target.value) : item.label
+    );
+  };
+
+  const submitColumnChanges = () => {
+    setIsEditCol(false);
+    update(ref(db, `/TAXES`), { COLUMN: head });
   };
 
   return (
@@ -137,41 +161,6 @@ const TaxesTable = (props) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {/* {props.isNewCol ? (
-                <TableCell
-                align="center"
-                style={{
-                  width: "100px",
-                }}
-              >
-                <IconButton
-                  onClick={() => handleNewCol()}
-                  edge="end"
-                  aria-label="submit"
-                >
-                  <CheckCircleIcon />
-                </IconButton>
-              </TableCell>
-              ) : <></> }
-              {head.length ? (
-                <TableCell
-                  align="center"
-                  style={{
-                    width: "100px",
-                  }}
-                >
-                  <IconButton edge="end" aria-label="edit">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => toggleDelCol()}
-                    edge="end"
-                    aria-label="delete"
-                  >
-                    {isDelCol ? <CancelIcon /> : <DeleteIcon />}
-                  </IconButton>
-                </TableCell>
-              ) : <></>} */}
               {props.isNewCol ? (
                 <TableCell
                   align="center"
@@ -194,17 +183,34 @@ const TaxesTable = (props) => {
                     width: "100px",
                   }}
                 >
-                  <IconButton edge="end" aria-label="edit">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => toggleDelCol()}
-                    edge="end"
-                    aria-label="delete"
-                  >
-                    {/* <DeleteIcon /> */}
-                    {isDelCol ? <CancelIcon /> : <DeleteIcon />}
-                  </IconButton>
+                  {!isDelCol ? (
+                    <IconButton
+                      onClick={() => toggleEditCol()}
+                      edge="end"
+                      aria-label="edit"
+                    >
+                      {isEditCol ? <CancelIcon /> : <EditIcon />}
+                    </IconButton>
+                  ) : (
+                    <></>
+                  )}
+                  {isEditCol ? (
+                    <IconButton
+                      onClick={() => submitColumnChanges()}
+                      edge="end"
+                      aria-label="submit"
+                    >
+                      <CheckCircleIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      onClick={() => toggleDelCol()}
+                      edge="end"
+                      aria-label="delete"
+                    >
+                      {isDelCol ? <CancelIcon /> : <DeleteIcon />}
+                    </IconButton>
+                  )}
                 </TableCell>
               ) : (
                 <></>
@@ -228,7 +234,19 @@ const TaxesTable = (props) => {
                       </IconButton>
                     </React.Fragment>
                   ) : (
-                    column.label
+                    <>
+                      {isEditCol && !props.isNewCol ? (
+                        <Input
+                          onKeyPress={handleEditEnterCol}
+                          defaultValue={column.label}
+                          onChange={(e) =>
+                            handleValueChangeColumn(e, column.id)
+                          }
+                        />
+                      ) : (
+                        column.label
+                      )}
+                    </>
                   )}
                 </TableCell>
               ))}

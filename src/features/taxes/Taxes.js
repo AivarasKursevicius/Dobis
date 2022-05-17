@@ -13,7 +13,7 @@ import TestTable from "./TaxesTable";
 import "./Taxes.css";
 
 function Taxes() {
-  const [filter, setFilter] = useState("ALL");
+  const [filter, setFilter] = useState("B");
   const [isNewRow, setIsNewRow] = useState(false);
   const [isNewCol, setIsNewCol] = useState(false);
 
@@ -52,10 +52,9 @@ function Taxes() {
               value={filter}
               onChange={handleChange}
             >
-              <MenuItem value="ALL">Visu</MenuItem>
+              <MenuItem value="B">Abieju</MenuItem>
               <MenuItem value="A">Aivaro</MenuItem>
               <MenuItem value="G">Guodos</MenuItem>
-              <MenuItem value="B">Abieju</MenuItem>
             </Select>
           </FormControl>
           <ButtonGroup sx={{ m: 3 }} variant="outlined">
@@ -81,6 +80,7 @@ function Taxes() {
         </Box>
       </CardContent>
       <TestTable
+        filter={filter}
         isNewRow={isNewRow}
         setIsNewRow={setIsNewRow}
         isNewCol={isNewCol}

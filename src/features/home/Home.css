@@ -1,0 +1,20 @@
+.card {
+    min-width: 275;
+    max-width: 600px;
+    border-radius: 20px;
+    background-color: red;
+  }
+
+
+  .MuiCardActionArea-focusHighlight {
+      background-color: #81c784 !important;
+      
+      
+  }
+
+  .Mui-focusVisible {
+    background-color: red !important;
+    
+  opacity: 0.9 !important;
+    
+}
