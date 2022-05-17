@@ -9,67 +9,46 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
-import { onValue, ref, set } from "@firebase/database";
+import { onValue, ref, set, remove } from "@firebase/database";
 import { db } from "../../app/firebase";
 import NewRow from "./NewRow";
 import Row from "./Row";
-
-const Head = [
-  {
-    id: "111",
-    label: "AAAA",
-    width: 170,
-    owner: "A",
-  },
-  {
-    id: "222",
-    label: "BBBB",
-    width: 170,
-    owner: "A",
-  },
-  {
-    id: "333",
-    label: "CCCC",
-    width: 170,
-    owner: "ALL",
-  },
-  {
-    id: "444",
-    label: "DDDD",
-    width: 170,
-    owner: "ALL",
-  },
-  {
-    id: "555",
-    label: "EEEE",
-    width: 170,
-    owner: "G",
-  },
-  {
-    id: "666",
-    label: "FFF",
-    width: 170,
-    owner: "G",
-  },
-];
+import Input from "@mui/material/Input";
+import { uid } from "uid";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const TaxesTable = (props) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isEditRow, setIsEditRow] = useState(false);
   const [rowData, setRowData] = useState([]);
+  const [head, setHead] = useState([]);
   const [newRow, setNewRow] = useState({ data: [] });
+  const [newCol, setNewCol] = useState({ label: "" });
+  const [isDelCol, setIsDelCol] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const starCountRef = ref(db, `TAXES/DATA`);
-    onValue(starCountRef, (snapshot) => {
+    const taxesDataRef = ref(db, `TAXES/DATA`);
+    onValue(taxesDataRef, (snapshot) => {
       const data = snapshot.val();
       if (data !== null) {
         const sortedData = Object.values(data)
           .slice()
           .sort((a, b) => b.date - a.date);
         setRowData(sortedData);
+      }
+    });
+    const taxesColumnRef = ref(db, `TAXES/COLUMN`);
+    onValue(taxesColumnRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data !== null) {
+        const sortedData = Object.values(data)
+          .slice()
+          .sort((a, b) => a.date - b.date);
+        setHead(sortedData);
       }
     });
   }, []);
@@ -100,10 +79,28 @@ const TaxesTable = (props) => {
     }
   };
 
+  const handleNewCol = () => {
+    if (newCol.label !== "") {
+      set(ref(db, `TAXES/COLUMN/${newCol.id}`), newCol);
+      setNewCol({ label: "" });
+      props.setIsNewCol(false);
+    }
+  };
+
   const handleValueChange = (e, id) => {
     newRow.data.map((item) =>
       item.id === id ? (item.value = e.target.value) : item.value
     );
+  };
+
+  const handleValueChangeCol = (e) => {
+    setNewCol({
+      id: uid(),
+      label: e.target.value,
+      width: 170,
+      date: new Date().getTime(),
+      owner: "ALL",
+    });
   };
 
   const handleCancel = () => {
@@ -118,6 +115,21 @@ const TaxesTable = (props) => {
       handleNewRow();
     }
   };
+  const handleEnterCol = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleNewCol();
+    }
+  };
+
+  const toggleDelCol = () => {
+    setIsDelCol(!isDelCol);
+    console.log(isDelCol);
+  };
+
+  const deleteCol = (id) => {
+    remove(ref(db, `/TAXES/COLUMN/${id}`));
+  };
 
   return (
     <Paper sx={{ width: "100%" }}>
@@ -125,27 +137,113 @@ const TaxesTable = (props) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell
+              {/* {props.isNewCol ? (
+                <TableCell
                 align="center"
                 style={{
                   width: "100px",
-                  display: "flex",
-                  justifyContent: "space-evenly",
                 }}
               >
-                <IconButton edge="end" aria-label="edit">
-                  <EditIcon />
+                <IconButton
+                  onClick={() => handleNewCol()}
+                  edge="end"
+                  aria-label="submit"
+                >
+                  <CheckCircleIcon />
                 </IconButton>
               </TableCell>
-              {Head.map((column) => (
+              ) : <></> }
+              {head.length ? (
+                <TableCell
+                  align="center"
+                  style={{
+                    width: "100px",
+                  }}
+                >
+                  <IconButton edge="end" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => toggleDelCol()}
+                    edge="end"
+                    aria-label="delete"
+                  >
+                    {isDelCol ? <CancelIcon /> : <DeleteIcon />}
+                  </IconButton>
+                </TableCell>
+              ) : <></>} */}
+              {props.isNewCol ? (
+                <TableCell
+                  align="center"
+                  style={{
+                    width: "100px",
+                  }}
+                >
+                  <IconButton
+                    onClick={() => handleNewCol()}
+                    edge="end"
+                    aria-label="submit"
+                  >
+                    <CheckCircleIcon />
+                  </IconButton>
+                </TableCell>
+              ) : head.length ? (
+                <TableCell
+                  align="center"
+                  style={{
+                    width: "100px",
+                  }}
+                >
+                  <IconButton edge="end" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => toggleDelCol()}
+                    edge="end"
+                    aria-label="delete"
+                  >
+                    {/* <DeleteIcon /> */}
+                    {isDelCol ? <CancelIcon /> : <DeleteIcon />}
+                  </IconButton>
+                </TableCell>
+              ) : (
+                <></>
+              )}
+
+              {head.map((column) => (
                 <TableCell
                   key={column.id}
                   align="left"
                   style={{ minWidth: column.width }}
                 >
-                  {column.label}
+                  {isDelCol && !props.isNewCol ? (
+                    <React.Fragment>
+                      {column.label}
+                      <IconButton
+                        onClick={() => deleteCol(column.id)}
+                        edge="end"
+                        aria-label="delete"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </React.Fragment>
+                  ) : (
+                    column.label
+                  )}
                 </TableCell>
               ))}
+              {props.isNewCol ? (
+                <TableCell
+                  key={1000}
+                  align="left"
+                  style={{ minWidth: "170px" }}
+                  onKeyPress={handleEnterCol}
+                >
+                  <Input onChange={(e) => handleValueChangeCol(e)} />
+                </TableCell>
+              ) : (
+                <></>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -156,7 +254,7 @@ const TaxesTable = (props) => {
                 newRow={newRow}
                 handleValueChange={handleValueChange}
                 handleEnter={handleEnter}
-                Head={Head}
+                Head={head}
                 isError={isError}
               />
             ) : (
@@ -170,7 +268,7 @@ const TaxesTable = (props) => {
                   <Row
                     key={i}
                     row={row}
-                    Head={Head}
+                    Head={head}
                     rows={rowData}
                     setRowData={setRowData}
                     handleEditRowToggle={handleEditRowToggle}

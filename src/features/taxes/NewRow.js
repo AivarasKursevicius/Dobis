@@ -9,17 +9,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 const NewRow = (props) => {
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key="08">
-      <TableCell
-        align="center"
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-        }}
-      >
+      <TableCell align="center">
         <IconButton
           onClick={() => props.handleCancel()}
           edge="end"
-          aria-label="edit"
+          aria-label="cancel"
         >
           <CancelIcon />
         </IconButton>

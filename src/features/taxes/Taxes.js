@@ -15,12 +15,18 @@ import "./Taxes.css";
 function Taxes() {
   const [filter, setFilter] = useState("ALL");
   const [isNewRow, setIsNewRow] = useState(false);
+  const [isNewCol, setIsNewCol] = useState(false);
 
   const handleChange = (event) => {
     setFilter(event.target.value);
   };
+
   const handleNewRow = () => {
     setIsNewRow(!isNewRow);
+  };
+
+  const handleNewCol = () => {
+    setIsNewCol(!isNewCol);
   };
 
   return (
@@ -46,9 +52,10 @@ function Taxes() {
               value={filter}
               onChange={handleChange}
             >
-              <MenuItem value="ALL">Abieju</MenuItem>
+              <MenuItem value="ALL">Visu</MenuItem>
               <MenuItem value="A">Aivaro</MenuItem>
               <MenuItem value="G">Guodos</MenuItem>
+              <MenuItem value="B">Abieju</MenuItem>
             </Select>
           </FormControl>
           <ButtonGroup sx={{ m: 3 }} variant="outlined">
@@ -66,13 +73,19 @@ function Taxes() {
               variant="outlined"
               size="medium"
               endIcon={<AddCircleIcon />}
+              onClick={() => handleNewCol()}
             >
               ADD NEW COLUMN
             </Button>
           </ButtonGroup>
         </Box>
       </CardContent>
-      <TestTable isNewRow={isNewRow} setIsNewRow={setIsNewRow} />
+      <TestTable
+        isNewRow={isNewRow}
+        setIsNewRow={setIsNewRow}
+        isNewCol={isNewCol}
+        setIsNewCol={setIsNewCol}
+      />
     </Card>
   );
 }
